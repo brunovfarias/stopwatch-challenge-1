@@ -3,7 +3,7 @@ task stage(dependsOn: ['build'])
 buildscript {
     ext {
         kotlin_version = '1.0.5'
-        spring_boot_version = '1.4.1.RELEASE'
+        spring_boot_version = '1.4.2.RELEASE'
         spring_loaded_version = '1.2.4.RELEASE'
         jackson_version = '2.8.4'
     }

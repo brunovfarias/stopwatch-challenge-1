@@ -4,7 +4,17 @@ Os participantes deverão desenvolver uma aplicação web capaz de fazer pesquis
 
 ###Prazo
 
-Até o fim do stopwatch de sexta-feira.
+- O código deverá ser entregue até o fim do stopwatch do dia 18/Nov/2016.
+
+###Pontuaçãoe e Critério de avaliação
+
+#####Requisitos funcionais (máx. 100 pontos)
+- Aplicação funcionando 100% de acordo as funcionalidades solicitadas
+
+#####Requisitos técnicos (máx. 100 pontos)
+- Uso adequado e otimizado do ECMAScript 2015/ES6.
+- Uso adequado e otimizado das bibliotecas JavaScript (jquery, momentjs, lodash, handlebars).
+- Clean Code.
 
 ###Funcionalidades
 
@@ -31,7 +41,6 @@ As seguintes funcionalidades deverão estar presentes na aplicação:
 
 ###Dicas
 1. Para pesquisar os filmes, use o endpoint `GET https://developers.themoviedb.org/3/search/search-movies`.
-1. Para obter os elencos de um filme, use o endpoint `GET /movie/{movie_id}/credits` (consulte a documentação).
 1. Para obter os gêneros, use o endpoint `GET /genre/movie/list`.
 1. Para obter as imagens dos cartazes, utilize a URI base `http://image.tmdb.org/t/p/w154`. 
 1. No site da documentação oficial, utilize a aba 'try it out' para testar as chamadas da API. 
