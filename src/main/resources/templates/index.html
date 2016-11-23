@@ -17,6 +17,61 @@
 
     <title>Title</title>
 
+    <script>
+        $(function(){
+            $(".botao-pesquisar").on("click",function(){
+                limpaTabela();
+                    new MovieDb().getMovies($(".campo-busca").val(),executaBrother);
+            })
+        });
+
+        function limpaTabela(){
+            $("tbody tr").remove();
+        }
+
+        function executaBrother(data){
+            var filmes=[];
+
+            for (var x in data.results){
+                let o = data.results[x];
+                filmes.push(new FilmeFactory(o).getInstace());
+            }
+
+            insereFilmes(filmes);
+        }
+
+        function insereFilmes(filmes){
+            var source   = $("#template").html();
+            var template = Handlebars.compile(source);
+            var html = template(filmes);
+
+            $("tbody").append(html);
+        }
+    </script>
+
+    <script id="template" type="text/x-handlebars-template">
+        {{#each this}}
+        <tr>
+            <td class="filme-cartaz"><img src="{{srcImage}}"/></td>
+            <td>
+                <div>
+                    <h3 class="filme-titulo">{{titulo}} (1985) <small class="filme-titulo-original">{{tituloOriginal}}</small></h3>
+                    <div class="filme-generos">
+                        <span class="label label-primary">Aventura</span>
+                        <span class="label label-primary">Comédia</span>
+                        <span class="label label-primary">Ficção científica</span>
+                        <span class="label label-primary">Família</span>
+                    </div>
+                    <div class="filme-overview lead">{{sinopse}}</div>
+                </div>
+            </td>
+            <td class="acoes">
+                <button type="button" class="btn btn-success btn-lg">Adicionar...</button>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
+
 </head>
 <body>
 
@@ -34,64 +89,6 @@
 
     <table class="table filmes">
         <tbody>
-        <tr>
-            <td class="filme-cartaz"><img src="/imagens/1.jpg" /></td>
-            <td>
-                <div>
-                    <h3 class="filme-titulo">De Volta para o Futuro (1985) <small class="filme-titulo-original">Back to the Future</small></h3>
-                    <div class="filme-generos">
-                        <span class="label label-primary">Aventura</span>
-                        <span class="label label-primary">Comédia</span>
-                        <span class="label label-primary">Ficção científica</span>
-                        <span class="label label-primary">Família</span>
-                    </div>
-                    <div class="filme-overview lead">Um jovem (Michael J. Fox) aciona acidentalmente uma máquina do tempo construída por um cientista (Christopher Lloyd) em um Delorean, retornando aos anos 50. Lá conhece sua mãe (Lea Thompson), antes ainda do casamento com seu pai, que fica apaixonada por ele. Tal paixão põe em risco sua própria existência, pois alteraria todo o futuro, forçando-o a servir de cupido entre seus pais.</div>
-                </div>
-            </td>
-            <td class="acoes">
-                <button type="button" class="btn btn-success btn-lg">Adicionar...</button>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="filme-cartaz"><img src="/imagens/2.jpg" /></td>
-            <td>
-                <div>
-                    <h3 class="filme-titulo">De Volta para o Futuro 2 (1989) <small class="filme-titulo-original">Back to the Future Part II</small></h3>
-                    <div class="filme-generos">
-                        <span class="label label-primary">Aventura</span>
-                        <span class="label label-primary">Comédia</span>
-                        <span class="label label-primary">Família</span>
-                        <span class="label label-primary">Ficção científica</span>
-                        <span class="label label-primary">Ação</span>
-                    </div>
-                    <div class="filme-overview lead">O cientista Doc Brown (Christopher Lloyd) leva Marty (Michael J. Fox) e sua namorada (Elisabeth Shue) para o ano 2015, com a finalidade de resolver uma questão familiar no futuro deles. Mas Biff (Thomas F. Wilson), velho inimigo da família, obriga-os a correrem contra o tempo (literalmente falando) para não alterarem os acontecimentos.</div>
-                </div>
-            </td>
-            <td class="acoes">
-                <button type="button" class="btn btn-success btn-lg">Adicionar...</button>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="filme-cartaz"><img src="/imagens/3.jpg" /></td>
-            <td>
-                <div>
-                    <h3 class="filme-titulo">De Volta para o Futuro 3 (1990) <small class="filme-titulo-original">Back to the Future Part III</small></h3>
-                    <div class="filme-generos">
-                        <span class="label label-primary">Aventura</span>
-                        <span class="label label-primary">Ação</span>
-                        <span class="label label-primary">Comédia</span>
-                        <span class="label label-primary">Ficção científica</span>
-                        <span class="label label-primary">Família</span>
-                    </div>
-                    <div class="filme-overview lead">Após de receber uma carta de Doc (Christopher Lloyd) datada de 1885, Marty McFly (Michael J. Fox) decide viajar para o Velho Oeste, no dia 2 de setembro do mesmo ano. Lá ele descobre que o doutor está fugindo de uma gangue de bandidos e se apaixonou por uma professora da época. Agora, Marty tem apenas cinco dias para salvar a si e aos seus amigos e voltar para o futuro.</div>
-                </div>
-            </td>
-            <td class="acoes">
-                <button type="button" class="btn btn-success btn-lg">Adicionar...</button>
-            </td>
-        </tr>
         </tbody>
     </table>
 </div>
