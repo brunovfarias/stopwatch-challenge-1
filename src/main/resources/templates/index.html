@@ -19,6 +19,23 @@
 
     <script>
         $(function(){
+            let urlGenres= "https://api.themoviedb.org/3/genre/movie/list";
+            let queryString = {
+                "api_key": "a500a4291e09f6a2ba7c43214281c000",
+                "language": "pt-br"
+            };
+
+            $.get(urlGenres, queryString)
+                    .done(function (g) {
+                       localStorage.setItem("generos", JSON.stringify(g));
+                    });
+
+            $(document).keypress(function(e) {
+                if(e.which == 13) {
+                    $(".botao-pesquisar").click();
+                }
+            });
+
             $(".botao-pesquisar").on("click",function(){
                 limpaTabela();
                     new MovieDb().getMovies($(".campo-busca").val(),executaBrother);
@@ -55,12 +72,11 @@
             <td class="filme-cartaz"><img src="{{srcImage}}"/></td>
             <td>
                 <div>
-                    <h3 class="filme-titulo">{{titulo}} (1985) <small class="filme-titulo-original">{{tituloOriginal}}</small></h3>
+                    <h3 class="filme-titulo">{{titulo}} ({{anoLancamento}})  <small class="filme-titulo-original">{{tituloOriginal}}</small></h3>
                     <div class="filme-generos">
-                        <span class="label label-primary">Aventura</span>
-                        <span class="label label-primary">Comédia</span>
-                        <span class="label label-primary">Ficção científica</span>
-                        <span class="label label-primary">Família</span>
+                        {{#each generos}}
+                        <span class="label label-primary">{{this}}</span>
+                        {{/each}}
                     </div>
                     <div class="filme-overview lead">{{sinopse}}</div>
                 </div>
