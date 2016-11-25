@@ -15,42 +15,38 @@
     <link rel="stylesheet" th:href="@{/styles/index.css}" />
     <script th:src="@{/scripts/index.js}"></script>
 
-    <title>Title</title>
+    <title>Onurbasystem</title>
 
     <script>
         $(function(){
-            let urlGenres= "https://api.themoviedb.org/3/genre/movie/list";
-            let queryString = {
-                "api_key": "a500a4291e09f6a2ba7c43214281c000",
-                "language": "pt-br"
-            };
-
-            $.get(urlGenres, queryString)
-                    .done(function (g) {
-                       localStorage.setItem("generos", JSON.stringify(g));
-                    });
-
-            $(document).keypress(function(e) {
-                if(e.which == 13) {
-                    $(".botao-pesquisar").click();
-                }
-            });
+            MovieDbService.loadGenres();
+            registraAcaoBotaoEnter();
 
             $(".botao-pesquisar").on("click",function(){
-                limpaTabela();
-                    new MovieDb().getMovies($(".campo-busca").val(),executaBrother);
+                buscaFilmes();
             })
         });
 
-        function limpaTabela(){
+        function registraAcaoBotaoEnter(){
+            $(document).keypress(function(e) {
+                if(e.which == 13) {buscaFilmes();}
+            });
+        }
+
+        function buscaFilmes(){
+            limpaResultados();
+            MovieDbService.getMovies($(".campo-busca").val(),buscaFilmesCallback);
+        }
+
+        function limpaResultados(){
             $("tbody tr").remove();
         }
 
-        function executaBrother(data){
-            var filmes=[];
+        function buscaFilmesCallback(MovieDbObj){
+            let filmes=[];
 
-            for (var x in data.results){
-                let o = data.results[x];
+            for (let x in MovieDbObj.results){
+                let o = MovieDbObj.results[x];
                 filmes.push(new FilmeFactory(o).getInstace());
             }
 
@@ -58,9 +54,9 @@
         }
 
         function insereFilmes(filmes){
-            var source   = $("#template").html();
-            var template = Handlebars.compile(source);
-            var html = template(filmes);
+            let source   = $("#template").html();
+            let template = Handlebars.compile(source);
+            let html = template(filmes);
 
             $("tbody").append(html);
         }

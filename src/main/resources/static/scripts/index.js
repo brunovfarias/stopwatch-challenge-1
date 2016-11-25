@@ -1,23 +1,39 @@
-class MovieDb{
-    constructor(){
-        this.keyApi = "a500a4291e09f6a2ba7c43214281c000";
-        this.urlImages= "http://image.tmdb.org/t/p/w154";
+class MovieDbService{
+    static getKeyApi(){
+        return this.keyApi = "a500a4291e09f6a2ba7c43214281c000";
     }
 
-    getMovies(query, fun) {
+    static getMovies(query, fun) {
         let urlMovies = "https://api.themoviedb.org/3/search/movie";
         let queryString = {
-            "api_key": this.keyApi,
-            "query"  : query,
-            "language": "pt-br",
-            "page": 1
+            "api_key"  : this.getKeyApi(),
+            "query"    : query,
+            "language" : "pt-br",
+            "page"     : 1
         };
 
-        return $.get(urlMovies, queryString)
+        $.get(urlMovies, queryString)
             .done(function (data) {
                 fun(data);
             });
-    };
+    }
+
+    static loadGenres(){
+        let urlGenres= "https://api.themoviedb.org/3/genre/movie/list";
+        let queryString = {
+            "api_key"   : this.getKeyApi(),
+            "language"  : "pt-br"
+        };
+
+        $.get(urlGenres, queryString)
+            .done(function (g) {
+                localStorage.setItem("generos", JSON.stringify(g));
+            });
+    }
+
+    static getUrlImages(){
+        return  "http://image.tmdb.org/t/p/w154";
+    }
 }
 
 class Filme{
@@ -37,20 +53,17 @@ class FilmeFactory{
         this.tituloOriginal = data.original_title;
         this.sinopse = data.overview;
         this.anoLancamento = moment(data.release_date).year();
-        if (data.poster_path === null)
-            {this.srcImage =  "https://s-media-cache-ak0.pinimg.com/736x/a6/e4/e0/a6e4e0205e012dd409f67bbbfd8c18ff.jpg"}
-        else
-            {this.srcImage = new MovieDb().urlImages + data.poster_path;}
-        this.generos = this.seila(data.genre_ids);
+        this.generos = this._discoverGenreName(data.genre_ids);
+        this.srcImage = this._choseImage(data.poster_path);
     }
 
     getInstace(){
         return new Filme(this.titulo, this.tituloOriginal, this.sinopse, this.srcImage, this.anoLancamento, this.generos);
     }
 
-    seila(idsGeneroDoFilme){
-        var generos=[];
-        var todosGeneros = JSON.parse(localStorage.getItem("generos"))
+    _discoverGenreName(idsGeneroDoFilme){
+        let generos=[];
+        let todosGeneros = JSON.parse(localStorage.getItem("generos"));
 
         for (var i in idsGeneroDoFilme){
             for (var j in todosGeneros.genres){
@@ -60,5 +73,12 @@ class FilmeFactory{
             }
         }
         return generos;
+    }
+
+    _choseImage(poster_path){
+        if (poster_path === null){
+            return "https://s-media-cache-ak0.pinimg.com/736x/a6/e4/e0/a6e4e0205e012dd409f67bbbfd8c18ff.jpg";
+        }
+        return this.srcImage = MovieDbService.getUrlImages() + poster_path;
     }
 }
